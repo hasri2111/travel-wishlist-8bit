@@ -29,9 +29,9 @@
         }
         .photo-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
-            max-width: 800px;
+            max-width: 600px;
             margin-bottom: 30px;
         }
         .photo-container img {
@@ -61,10 +61,13 @@
     <h1>Welcome to 8 BIT's Travel Memories</h1>
     <div class="photo-container">
         <img src="img/users/Hasri.jpg" alt="Hasri">
-        <img src="img/users/hasni.jpg" alt="Hasni ">
-        <img src="img/users/zul.jpg" alt="Andi zul">
-        <img src="img/users/Hairan.jpg" alt="Hairan ">
-        <img src="img/users/Ade.jpg" alt="Ade Ainun 5">
+        <img src="img/users/hasni.jpg" alt="Hasni">
+        <img src="img/users/Sukmayani.jpg" alt="Sukmayani">
+        <img src="img/users/Rifqa.jpg" alt="Rifqa"> 
+        <img src="img/users/zul.jpg" alt="Zul">
+        <img src="img/users/Hairan.jpg" alt="Hairan">
+        <img src="img/users/Ade.jpg" alt="Ade">
+        <img src="img/users/Riswan.jpg" alt="Riswan">
         
     </div>
     <a class="login-button" href="login.php">Login</a>
