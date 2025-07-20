@@ -15,8 +15,7 @@ Aplikasi web sederhana berbasis PHP & MySQL yang dikembangkan oleh kelompok 8 BI
 - PHP
 - MySQL
 - HTML & CSS
-- JavaScript (opsional untuk interaksi UI)
-- XAMPP / Hosting 000webhost
+- XAMPP 
 
 ## 🗂 Struktur Database
 **Database:** `travel_8bit`  
@@ -35,7 +34,7 @@ Contoh kolom pada tabel `wishlist`:
 2. Ekstrak ke `htdocs` (jika menggunakan XAMPP)
 3. Import file `travel_8bit.sql` ke phpMyAdmin
 4. Jalankan server Apache & MySQL dari XAMPP
-5. Akses via browser ke `http://localhost/nama_folder`
+5. Akses via browser ke `http://localhost/TRAVEL_8BIT/
 6. Registrasi akun, lalu login dan mulai gunakan
 
 ## 👨‍👩‍👧‍👦 Anggota Kelompok 8 BIT
