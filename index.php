@@ -1,4 +1,3 @@
-<!-- Ini adalah index.php sebagai tampilan awal -->
 <!DOCTYPE html>
 <html>
 <head>
