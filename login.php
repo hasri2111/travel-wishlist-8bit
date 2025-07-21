@@ -1,93 +1,103 @@
 <?php
 session_start();
-include 'koneksi.php';
+$koneksi = new mysqli("localhost", "root", "", "travel_8bit");
 
-$error = '';
-
-if (isset($_POST['login'])) {
-    $username = trim($_POST['username']);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $query = $koneksi->query("SELECT * FROM users WHERE username='$username'");
-    $data = $query->fetch_assoc();
-
-    if ($data && password_verify($password, $data['password'])) {
-        $_SESSION['user'] = $data;
-        header("Location: dashboard.php");
-        exit;
+    $result = $koneksi->query("SELECT * FROM users WHERE username = '$username'");
+    if ($result->num_rows == 1) {
+        $user = $result->fetch_assoc();
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['user'] = $user;
+            header("Location: dashboard.php");
+            exit;
+        } else {
+            $error = "Password salah!";
+        }
     } else {
-        $error = "Username atau password salah!";
+        $error = "Username tidak ditemukan!";
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Login - Travel Wishlist 8 BIT</title>
+    <title>Login Akun - Travel 8 BIT</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(to right, #2980b9, #6dd5fa);
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #6dd5fa, #2980b9);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
+
         .login-box {
             background: white;
-            padding: 30px;
+            padding: 40px 30px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            width: 360px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+            width: 350px;
             text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
         }
-        .login-box h2 {
+
+        h2 {
             margin-bottom: 20px;
             color: #333;
         }
-        .login-box input {
+
+        input {
             width: 100%;
             padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
+            margin-bottom: 15px;
             border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
         }
-        .login-box button {
-            background: #3498db;
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2980b9;
             color: white;
             border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 10px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
+            transition: background 0.3s;
         }
-        .login-box .error {
+
+        button:hover {
+            background-color: #2471a3;
+        }
+
+        .error {
             color: red;
             margin-bottom: 10px;
+            font-size: 14px;
         }
-        .login-box a {
-            display: block;
-            margin-top: 10px;
-            color: #3498db;
-            text-decoration: none;
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
         }
     </style>
 </head>
 <body>
     <div class="login-box">
-        <h2>Login 8 BIT</h2>
-        <?php if ($error): ?>
-            <div class="error"><?= $error ?></div>
-        <?php endif; ?>
+        <h2>Login Akun</h2>
+        <?php if (isset($error)) echo "<div class='error'>$error</div>"; ?>
         <form method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit" name="login">Login</button>
+            <input type="text" name="username" placeholder="Username" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <button type="submit">Login</button>
         </form>
-        <a href="register.php">Belum punya akun? Daftar</a>
     </div>
 </body>
 </html>
