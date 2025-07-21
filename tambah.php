@@ -1,92 +1,92 @@
 <?php
-include 'koneksi.php';
+session_start();
+$koneksi = new mysqli("localhost", "root", "", "travel_8bit");
 
-if (isset($_POST['simpan'])) {
-    $nama = $_POST['nama'];
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit;
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $user_id = $_SESSION['user']['id'];
+    $nama = $_POST['nama_wisata'];
     $kota = $_POST['kota'];
     $rating = $_POST['rating'];
     $tanggal = $_POST['tanggal'];
     $deskripsi = $_POST['deskripsi'];
 
+    // Upload foto
     $foto = $_FILES['foto']['name'];
     $tmp = $_FILES['foto']['tmp_name'];
-    $path = "img/wishlist/" . $foto;
-    move_uploaded_file($tmp, $path);
+    move_uploaded_file($tmp, "uploads/" . $foto);
 
-    $koneksi->query("INSERT INTO wishlist (nama_wisata, kota, rating, tanggal, deskripsi, foto) VALUES (
-        '$nama', '$kota', '$rating', '$tanggal', '$deskripsi', '$foto')");
+    // Simpan ke database
+    $koneksi->query("INSERT INTO wishlist (user_id, nama_wisata, kota, rating, tanggal, foto, deskripsi) VALUES (
+        '$user_id', '$nama', '$kota', '$rating', '$tanggal', '$foto', '$deskripsi'
+    )");
 
     header("Location: dashboard.php");
+    exit;
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Tambah Wishlist</title>
+    <title>Tambah Wishlist - Travel 8 BIT</title>
     <style>
         body {
             font-family: sans-serif;
-            background: linear-gradient(to right, #6dd5ed, #2193b0);
+            background: linear-gradient(to right, #6dd5fa, #2980b9);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
         .form-box {
-            background: #fff;
+            background: white;
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
             width: 400px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
-        .form-box h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-        }
-        .form-box input,
-        .form-box textarea,
-        .form-box select {
+        input, textarea, select {
+            display: block;
             width: 100%;
+            margin-bottom: 15px;
             padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
             border-radius: 8px;
+            border: 1px solid #ccc;
         }
-        .form-box button {
-            background: #2980b9;
+        button {
+            padding: 10px;
+            background-color: #2980b9;
             color: white;
             border: none;
-            padding: 10px 20px;
             border-radius: 8px;
-            cursor: pointer;
             width: 100%;
-        }
-        .form-box button:hover {
-            background: #1c5980;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="form-box">
-        <h2>Add Destination </h2>
+        <h2>Tambah Wishlist</h2>
         <form method="POST" enctype="multipart/form-data">
-            <input type="text" name="nama" placeholder="Nama Wisata" required><br>
-            <input type="text" name="kota" placeholder="Kota" required><br>
+            <input type="text" name="nama_wisata" placeholder="Nama Wisata" required />
+            <input type="text" name="kota" placeholder="Kota" required />
             <select name="rating" required>
                 <option value="">Pilih Rating</option>
-                <option value="1">1 Bintang</option>
-                <option value="2">2 Bintang</option>
-                <option value="3">3 Bintang</option>
-                <option value="4">4 Bintang</option>
-                <option value="5">5 Bintang</option>
-            </select><br>
-            <input type="date" name="tanggal" required><br>
-            <textarea name="deskripsi" rows="4" placeholder="Deskripsi" required></textarea><br>
-            <input type="file" name="foto" required><br><br>
-            <button type="submit" name="simpan">Simpan</button>
+                <option value="1">★☆☆☆☆</option>
+                <option value="2">★★☆☆☆</option>
+                <option value="3">★★★☆☆</option>
+                <option value="4">★★★★☆</option>
+                <option value="5">★★★★★</option>
+            </select>
+            <input type="date" name="tanggal" required />
+            <input type="file" name="foto" accept="image/*" required />
+            <textarea name="deskripsi" placeholder="Deskripsi wisata..." rows="4" required></textarea>
+            <button type="submit">Simpan Wishlist</button>
         </form>
     </div>
 </body>
